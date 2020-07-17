@@ -7,23 +7,33 @@ import { roles } from "../../utils/constant";
 // }
 
 class LoginComponent extends React.Component<any> {
+    constructor(props: any) {
+        super(props)
+        this.authGuard(AuthSevice.getUserData());
+    }
+
+    authGuard(result: any) {
+        if (result) {
+            if (roles.ADMIN === result.role) {
+                this.props.history.push("/app/user");
+            } else {
+                this.props.history.push("/app/lead");
+            }
+        }
+    }
 
     state = {
         isSubmitting: true,
     }
 
-    // login function
     async login() {
         console.log('control in login')
         try {
             let response = await AuthSevice.login({ email: 'superadmin@gmail.com', password: 'testpassword' })
             if (response) {
                 let { result } = response;
-                if (roles.ADMIN == result.role) {
-                    this.props.history.push("/app/user");
-                } else {
-                    this.props.history.push("/app/lead");
-                }
+                AuthSevice.setUserData(result);
+                this.authGuard(result);
             }
         } catch (error) {
             console.log(error);

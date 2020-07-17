@@ -1,10 +1,12 @@
 import BaseSevice from "./base";
 import { postRequest } from '../utils/axios'
-import { LoginInterface } from '../interfaces/interface';
+import { LoginInterface, IUserInformation } from '../interfaces/interface';
 import { apiUri } from "../utils/constant";
 const { loginUrl } = apiUri;
 
 export class AuthSevice extends BaseSevice {
+
+    private static userData: IUserInformation;
 
     static async login(data: LoginInterface) {
         try {
@@ -13,6 +15,15 @@ export class AuthSevice extends BaseSevice {
         } catch (error) {
             throw error;
         }
+    }
+
+    static setUserData(userData: IUserInformation): void {
+        localStorage.setItem('_u', JSON.stringify(userData));
+        this.userData = userData;
+    }
+
+    static getUserData(): IUserInformation {
+        return this.userData || JSON.parse(''+localStorage.getItem('_u'));
     }
 
 }

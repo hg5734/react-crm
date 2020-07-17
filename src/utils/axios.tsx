@@ -32,7 +32,7 @@ function _fetch(method: string, path: string, { qs = null, data = {} } = {}, tok
         ? {
             headers: {
                 ...DEFAULT_OPTIONS.headers,
-                'x-auth-token': `${token}`,
+                'x-access-token': `${token}`,
             },
         }
         : null;
