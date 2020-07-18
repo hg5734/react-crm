@@ -5,13 +5,13 @@ import { email, required } from "../../utils/validations";
 import { renderField } from "../common/form/field";
 import { Field, reduxForm } from 'redux-form'
 import { User } from '../../interfaces/interface';
+import PubSub from 'pubsub-js'
 
 
 class AddUserComponent extends React.Component<any> {
 
     constructor(props: any) {
         super(props)
-        console.log(this.props)
     }
 
     addUser = async (values: User) => {
@@ -20,6 +20,7 @@ class AddUserComponent extends React.Component<any> {
             let response = await AppSevice.addUser(values);
             if (response) {
                 this.props.reset();
+                PubSub.publish('USER_LIST', '');
             }
         } catch (error) {
             console.log(error);
