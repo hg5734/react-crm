@@ -2,24 +2,23 @@ import * as React from "react";
 import Button from '@material-ui/core/Button';
 import { AppSevice } from "../../services/app.service";
 import LogoutComponent from "../pre-auth/logout";
-
-const styles = {
-}
+import { Field, reduxForm } from 'redux-form'
+import { renderField } from "../common/form/field";
+import { Lead } from '../../interfaces/interface';
+import { email, required } from "../../utils/validations";
 
 class LeadComponent extends React.Component<any> {
-    state = {
-        isSubmitting: true,
+
+    constructor(props: any) {
+        super(props)
     }
-    async addLead() {
+    addLead = async (values: Lead) => {
         console.log('control in add lead');
         try {
-            let response = await AppSevice.addLead({
-                "clientEmail": "test@gmail.com",
-                "clientName": "test",
-                "clientPhone": "737373737"
-            })
+            let response = await AppSevice.addLead(values)
             if (response) {
-                let { result } = response;
+                this.props.reset();
+                alert('lead added successfuly');
             }
         } catch (error) {
             console.log(error);
@@ -28,17 +27,18 @@ class LeadComponent extends React.Component<any> {
 
     }
     render() {
-        const { isSubmitting } = this.props;
-
+        const { handleSubmit, submitting } = this.props;
         return (
             <div >
-                <LogoutComponent/>
-                <Button variant="contained" color="primary" onClick={() => this.addLead()} disabled={isSubmitting}>
-                    Add Lead
-                </Button>
+                <LogoutComponent />
+                <form onSubmit={handleSubmit(this.addLead)}>
+                    <Field name="clientName" type="text" component={renderField} label="client name" validate={[required]} />
+                    <Field name="clientEmail" type="email" component={renderField} label="client email" validate={[email, required]} />
+                    <Field name="clientPhone" type="number" component={renderField} label="client phone" validate={[required]} />
+                    <div> <Button variant="contained" color="primary" type="submit" disabled={submitting}> Add Lead</Button></div>
+                </form>
             </div>
         );
     }
 }
-
-export default LeadComponent;
+export default reduxForm({ form: 'leadForm' })(LeadComponent);

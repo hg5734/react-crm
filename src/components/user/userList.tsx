@@ -30,7 +30,7 @@ class UserListComponent extends React.Component<any> {
         return (
             <ul>
                 {users.map((user: User) => (
-                    <li key={user.id}>
+                    <li key={user._id}>
                         <div>{user.email}</div>
                         <div>{user.name}</div>
                         <div>{user.role}</div>

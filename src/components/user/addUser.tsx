@@ -3,7 +3,6 @@ import Button from '@material-ui/core/Button';
 import { AppSevice } from "../../services/app.service";
 import { email, required } from "../../utils/validations";
 import { renderField } from "../common/form/field";
-import { roles } from "../../utils/constant";
 import { Field, reduxForm } from 'redux-form'
 import { User } from '../../interfaces/interface';
 
@@ -12,6 +11,7 @@ class AddUserComponent extends React.Component<any> {
 
     constructor(props: any) {
         super(props)
+        console.log(this.props)
     }
 
     addUser = async (values: User) => {
@@ -19,7 +19,7 @@ class AddUserComponent extends React.Component<any> {
         try {
             let response = await AppSevice.addUser(values);
             if (response) {
-                this.props.resetForm();
+                this.props.reset();
             }
         } catch (error) {
             console.log(error);
