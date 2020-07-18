@@ -6,6 +6,11 @@ import { Field, reduxForm } from 'redux-form'
 import { renderField } from "../common/form/field";
 import { Lead } from '../../interfaces/interface';
 import { email, required } from "../../utils/validations";
+import { container } from "../../styles";
+
+const styles = {
+    container
+}
 
 class LeadComponent extends React.Component<any> {
 
@@ -31,12 +36,14 @@ class LeadComponent extends React.Component<any> {
         return (
             <div >
                 <LogoutComponent />
-                <form onSubmit={handleSubmit(this.addLead)}>
-                    <Field name="clientName" type="text" component={renderField} label="client name" validate={[required]} />
-                    <Field name="clientEmail" type="email" component={renderField} label="client email" validate={[email, required]} />
-                    <Field name="clientPhone" type="number" component={renderField} label="client phone" validate={[required]} />
-                    <div> <Button variant="contained" color="primary" type="submit" disabled={submitting}> Add Lead</Button></div>
-                </form>
+                <div style={styles.container}>
+                    <form onSubmit={handleSubmit(this.addLead)}>
+                        <Field name="clientName" type="text" component={renderField} label="client name" validate={[required]} />
+                        <Field name="clientEmail" type="email" component={renderField} label="client email" validate={[email, required]} />
+                        <Field name="clientPhone" type="number" component={renderField} label="client phone" validate={[required]} />
+                        <div> <Button variant="contained" color="primary" type="submit" disabled={submitting}> Add Lead</Button></div>
+                    </form>
+                </div>
             </div>
         );
     }

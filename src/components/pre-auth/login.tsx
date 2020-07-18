@@ -6,18 +6,15 @@ import { Field, reduxForm } from 'redux-form'
 import { email, required } from "../../utils/validations";
 import { renderField } from "../common/form/field";
 import { LoginInterface } from '../../interfaces/interface';
+import { container,button } from "../../styles";
 
 const styles = {
     loginContainer: {
-        minWidth: 320,
-        maxWidth: 400,
-        height: 'auto',
-        top: '20%',
-        left: 0,
-        right: 0,
-        margin: 'auto',
-        position: 'absolute' as 'absolute'
+        ...container
     },
+    button :{
+        ...button,
+    }
 }
 
 class LoginComponent extends React.Component<any> {
@@ -55,10 +52,10 @@ class LoginComponent extends React.Component<any> {
         const { submitting, handleSubmit } = this.props
         return (
             <div style={styles.loginContainer}>
-                <form onSubmit={handleSubmit(this.login).bind(this)}>
-                    <Field name="email" type="email" component={renderField} label="Email" validate={[email, required]}  />
+                <form onSubmit={handleSubmit(this.login).bind(this)} >
+                    <Field name="email" type="email" component={renderField} label="Email Id" validate={[email, required]} />
                     <Field name="password" type="password" component={renderField} label="Password" validate={[required]} />
-                    <div> <Button variant="contained" color="primary" type="submit" disabled={submitting}> Login</Button></div>
+                    <Button style={styles.button} variant="contained" color="primary" type="submit" disabled={submitting}> Login</Button>
                 </form>
             </div>
         );
