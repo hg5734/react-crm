@@ -1,6 +1,6 @@
 export const container = {
     minWidth: 320,
-    maxWidth: 400,
+    maxWidth: 500,
     height: 'auto',
     top: '20%',
     left: 0,

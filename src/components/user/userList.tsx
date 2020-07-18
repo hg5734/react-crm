@@ -2,7 +2,11 @@ import * as React from "react";
 import { AppSevice } from "../../services/app.service";
 import { User } from '../../interfaces/interface';
 import PubSub from 'pubsub-js'
-
+const styles = {
+    list: {
+        margin: '10px'
+    }
+}
 class UserListComponent extends React.Component<any> {
 
     state: any = {
@@ -37,20 +41,20 @@ class UserListComponent extends React.Component<any> {
     }
     componentWillUnmount() {
         let { token } = this.state;
-        if(token) {
+        if (token) {
             PubSub.unsubscribe(token);
         }
     }
-    
+
     render() {
         let { users } = this.state;
         return (
             <ul>
                 {users.map((user: User) => (
                     <li key={user._id}>
-                        <div>{user.email}</div>
-                        <div>{user.name}</div>
-                        <div>{user.role}</div>
+                        <span style={styles.list}> {user.email}</span>
+                        <span style={styles.list}>{user.name}</span>
+                        <span style={styles.list}>{user.role}</span>
                     </li>
                 ))}
             </ul>
