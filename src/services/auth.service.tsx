@@ -6,7 +6,7 @@ const { loginUrl } = apiUri;
 
 export class AuthSevice extends BaseSevice {
 
-    private static userData: IUserInformation;
+    private static userData: IUserInformation | null;
 
     static async login(data: LoginInterface) {
         try {
@@ -24,6 +24,11 @@ export class AuthSevice extends BaseSevice {
 
     static getUserData(): IUserInformation {
         return this.userData || JSON.parse(''+localStorage.getItem('_u'));
+    }
+
+    static clearUser() {
+        this.clearLocalStore();
+        this.userData = null;
     }
 
 }

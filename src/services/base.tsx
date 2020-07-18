@@ -6,6 +6,10 @@ class BaseSevice {
         return '' + localStorage.getItem(name)
     }
 
+    static clearLocalStore() {
+        localStorage.clear();
+    }
+
     static getToken(): string {
         return this.token || (JSON.parse(this.localStore('_u')) ? JSON.parse(this.localStore('_u')).token : '');
     }

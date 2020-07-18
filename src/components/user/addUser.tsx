@@ -1,40 +1,50 @@
 import * as React from "react";
 import Button from '@material-ui/core/Button';
 import { AppSevice } from "../../services/app.service";
+import { email, required } from "../../utils/validations";
+import { renderField } from "../common/form/field";
+import { roles } from "../../utils/constant";
+import { Field, reduxForm } from 'redux-form'
+import { User } from '../../interfaces/interface';
+
 
 class AddUserComponent extends React.Component<any> {
-    state = {
-        isSubmitting: true,
+
+    constructor(props: any) {
+        super(props)
     }
 
-    async addUser() {
+    addUser = async (values: User) => {
         console.log('control in add user')
         try {
-            let response = await AppSevice.addUser({
-                "name": "staff",
-                "email": "staff1@gmail.com",
-                "password": "testpassword",
-                "role": "STAFF"
-            })
+            let response = await AppSevice.addUser(values);
             if (response) {
-                let { result } = response;
+                this.props.resetForm();
             }
         } catch (error) {
             console.log(error);
             alert(error.response.data.message || 'error in add user')
         }
-
     }
+    
     render() {
-        const { isSubmitting } = this.props;
+        const { handleSubmit, submitting } = this.props;
         return (
             <div >
-                <Button variant="contained" color="primary" onClick={() => this.addUser()} disabled={isSubmitting}>
-                    Add User
-                </Button>
+                <form onSubmit={handleSubmit(this.addUser).bind(this)}>
+                    <Field name="name" type="text" component={renderField} label="name" validate={[required]} />
+                    <Field name="email" type="email" component={renderField} label="Email" validate={[email, required]} />
+                    <Field name="password" type="password" component={renderField} label="Password" validate={[required]} />
+                    <Field name="role" component='select' label="Role" validate={[required]} >
+                        <option value="STAFF">STAFF</option>
+                        <option value="ADMIN">ADMIN</option>
+                    </Field>
+                    <div> <Button variant="contained" color="primary" type="submit" disabled={submitting}> Add User</Button></div>
+                </form>
             </div>
         );
     }
 }
 
-export default AddUserComponent;
+export default reduxForm({ form: 'userForm' })(AddUserComponent);
+

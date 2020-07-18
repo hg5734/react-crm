@@ -2,9 +2,23 @@ import * as React from "react";
 import Button from '@material-ui/core/Button';
 import { AuthSevice } from "../../services/auth.service";
 import { roles } from "../../utils/constant";
+import { Field, reduxForm } from 'redux-form'
+import { email, required } from "../../utils/validations";
+import { renderField } from "../common/form/field";
+import { LoginInterface } from '../../interfaces/interface';
 
-// const styles = {
-// }
+const styles = {
+    loginContainer: {
+        minWidth: 320,
+        maxWidth: 400,
+        height: 'auto',
+        top: '20%',
+        left: 0,
+        right: 0,
+        margin: 'auto',
+        position: 'absolute' as 'absolute'
+    },
+}
 
 class LoginComponent extends React.Component<any> {
     constructor(props: any) {
@@ -22,14 +36,10 @@ class LoginComponent extends React.Component<any> {
         }
     }
 
-    state = {
-        isSubmitting: true,
-    }
-
-    async login() {
-        console.log('control in login')
+    login = async (values: LoginInterface) => {
+        console.log('control in login', values)
         try {
-            let response = await AuthSevice.login({ email: 'superadmin@gmail.com', password: 'testpassword' })
+            let response = await AuthSevice.login(values)
             if (response) {
                 let { result } = response;
                 AuthSevice.setUserData(result);
@@ -42,15 +52,17 @@ class LoginComponent extends React.Component<any> {
     }
 
     render() {
-        const { isSubmitting } = this.props;
+        const { submitting, handleSubmit } = this.props
         return (
-            <div >
-                <Button variant="contained" color="primary" onClick={() => this.login()} disabled={isSubmitting}>
-                    Login
-                </Button>
+            <div style={styles.loginContainer}>
+                <form onSubmit={handleSubmit(this.login).bind(this)}>
+                    <Field name="email" type="email" component={renderField} label="Email" validate={[email, required]}  />
+                    <Field name="password" type="password" component={renderField} label="Password" validate={[required]} />
+                    <div> <Button variant="contained" color="primary" type="submit" disabled={submitting}> Login</Button></div>
+                </form>
             </div>
         );
     }
 }
 
-export default LoginComponent;
+export default reduxForm({ form: 'loginForm' })(LoginComponent);
